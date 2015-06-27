@@ -49,12 +49,12 @@ routine_head: label_part const_part type_part var_part routine_part {
 	printf("routine_head end\n");
 };
 
-label_part: %empty {
+label_part: /*empty*/ {
 };
 
 const_part: TOK_CONST const_expr_list {
 	printf("const_part end\n");
-}| %empty {
+}| /*empty*/ {
 };
 
 const_expr_list: const_expr_list TOK_ID TOK_EQUAL const_value TOK_SEMI {
@@ -74,7 +74,7 @@ const_value: TOK_INTEGER {
 
 type_part: TOK_TYPE type_decl_list {
 	printf("type_part end\n");
-}| %empty {
+}| /*empty*/ {
 };
 
 type_decl_list: type_decl_list type_definition {
@@ -120,7 +120,7 @@ simple_type_decl: TOK_SYS_TYPE {
 
 var_part: TOK_VAR var_decl_list {
 	printf("var_part end\n");
-}| %empty {
+}| /*empty*/ {
 };
 
 var_decl_list: var_decl_list var_decl {
@@ -137,7 +137,7 @@ routine_part: routine_part function_decl {
 }| routine_part procedure_decl {
 }| function_decl {
 }| procedure_decl {
-}| %empty {
+}| /*empty*/ {
 };
 
 function_decl: function_head TOK_SEMI sub_routine TOK_SEMI {
@@ -157,7 +157,7 @@ procedure_head: TOK_PROCEDURE TOK_ID parameters {
 };
 
 parameters: TOK_LP para_decl_list TOK_RP {
-}| %empty {
+}| /*empty*/ {
 };
 
 para_decl_list: para_decl_list TOK_SEMI para_type_list {
@@ -179,7 +179,7 @@ routine_body: compound_stmt {
 };
 
 stmt_list: stmt_list stmt TOK_SEMI {
-}| %empty {
+}| /*empty*/ {
 }| stmt_list error {
 }| error {
 };
@@ -218,7 +218,7 @@ if_stmt: TOK_IF expression TOK_THEN stmt else_clause {
 };
 
 else_clause: TOK_ELSE stmt {
-}| %empty {
+}| /*empty*/ {
 };
 
 repeat_stmt: TOK_REPEAT stmt_list TOK_UNTIL expression {
