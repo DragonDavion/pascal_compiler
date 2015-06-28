@@ -16,6 +16,7 @@ static void update_location(YYLTYPE*, char*);
 
 %%
 
+"/" { return TOK_DIV; }
 ".." { return TOK_DOTDOT; }
 "." { return TOK_DOT; }
 ";" { return TOK_SEMI; }
@@ -93,7 +94,7 @@ SUCC { yylval->integer = SYS_TYPE_SUCC; return TOK_SYS_FUNCT; }
 	yylval->string[yyleng - 2] = 0;
 	return TOK_STRING;
 	}
-[0-9a-z_]+ { yylval->string = strdup(yytext); return TOK_ID; }
+[a-z][0-9a-z_]* { yylval->string = strdup(yytext); return TOK_ID; }
 
 [ \t\n\r]
 . { return TOK_UNKNOW_CHAR; }
