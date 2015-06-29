@@ -56,11 +56,11 @@ begin
 end;
 
 begin
-	a := 20 + 8
+	a := 20 + 8;
 	b := 30 + 700;
 	i := (a + b) + 2 * (a + b);
 
-	i := i - 3
+	i := i - 3;
 	write('i = ');
 	writeln(i);
 
