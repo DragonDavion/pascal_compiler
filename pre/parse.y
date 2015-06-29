@@ -1,6 +1,8 @@
 %{
 #include <stdio.h>
 #include "main.h"
+#include "symbol_table.h"
+#include "stack.h"
 
 int yylex(YYSTYPE*, YYLTYPE*);
 %}
@@ -34,9 +36,15 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %%
 
 program: program_head routine TOK_DOT {
+	destroy_symbol_table_stack();
 };
 
 program_head: TOK_PROGRAM TOK_ID TOK_SEMI {
+	struct symbol_table_s *symbol_table = symbol_table();
+	init_symbol_table_stack();
+	push(symbol_table_stack, symbol_table);
+	struct proc_info_s *proc_info = new_proc_info($2);
+	add_proc_info(symbol_table, proc_info);
 }| error;
 
 routine: routine_head routine_body {

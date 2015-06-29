@@ -16,6 +16,7 @@ static void update_location(YYLTYPE*, char*);
 
 %%
 
+\/\/[^\n\r]*\n
 "/" { return TOK_DIV; }
 ".." { return TOK_DOTDOT; }
 "." { return TOK_DOT; }
