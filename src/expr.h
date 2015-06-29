@@ -2,7 +2,6 @@
 #define EXPR_H_
 
 #include <stdlib.h>
-#include "lex.yy.h"
 
 #define EXPR_TYPE_OP 0
 #define EXPR_TYPE_VAR 1

@@ -17,83 +17,89 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %define parse.error verbose
 
 %union {
-	char *str;
+	char *string;
+	struct routine_s *routine;
+	struct const_def_s *const_def;
 	struct type_s *type;
 	struct field_s *field;
 	struct name_list_s *name_list;
+	struct var_s *var;
+	struct routine_proto_s *routine_proto;
+	struct param_s *param;
+	struct param_item_s *param_item;
 	struct stmt_s *stmt;
 	struct case_expr_s *case_expr;
 	struct expr_s *expr;
 	struct dummy_s *dummy;
 }
 
-%token <str> TOK_AND
-%token <str> TOK_ARRAY
-%token <str> TOK_ASSIGN
-%token <str> TOK_BEGIN
-%token <str> TOK_CASE
-%token <str> TOK_CHAR
-%token <str> TOK_COLON
-%token <str> TOK_COMMA
-%token <str> TOK_CONST
-%token <str> TOK_DIV
-%token <str> TOK_DO
-%token <str> TOK_DOT
-%token <str> TOK_DOTDOT
-%token <str> TOK_DOWNTO
-%token <str> TOK_ELSE
-%token <str> TOK_END
-%token <str> TOK_EQUAL
-%token <str> TOK_FOR
-%token <str> TOK_FUNCTION
-%token <str> TOK_GE
-%token <str> TOK_GOTO
-%token <str> TOK_GT
-%token <str> TOK_ID
-%token <str> TOK_IF
-%token <str> TOK_INTEGER
-%token <str> TOK_LB
-%token <str> TOK_LE
-%token <str> TOK_LP
-%token <str> TOK_LT
-%token <str> TOK_MINUS
-%token <str> TOK_MOD
-%token <str> TOK_MUL
-%token <str> TOK_NOT
-%token <str> TOK_OF
-%token <str> TOK_OR
-%token <str> TOK_PLUS
-%token <str> TOK_PROCEDURE
-%token <str> TOK_PROGRAM
-%token <str> TOK_RB
-%token <str> TOK_RDIV
-%token <str> TOK_READ
-%token <str> TOK_REAL
-%token <str> TOK_RECORD
-%token <str> TOK_REPEAT
-%token <str> TOK_RP
-%token <str> TOK_SEMI
-%token <str> TOK_STRING
-%token <str> TOK_SYS_CON
-%token <str> TOK_SYS_FUNCT
-%token <str> TOK_SYS_PROC
-%token <str> TOK_SYS_TYPE
-%token <str> TOK_THEN
-%token <str> TOK_TO
-%token <str> TOK_TYPE
-%token <str> TOK_UNEQUAL
-%token <str> TOK_UNKNOW_CHAR
-%token <str> TOK_UNTIL
-%token <str> TOK_VAR
-%token <str> TOK_WHILE
-%type <dummy> program
-%type <dummy> program_head
-%type <dummy> routine
-%type <dummy> sub_routine
-%type <dummy> routine_head
-%type <dummy> label_part
-%type <dummy> const_part
-%type <dummy> const_expr_list
+%token <string> TOK_AND
+%token <string> TOK_ARRAY
+%token <string> TOK_ASSIGN
+%token <string> TOK_BEGIN
+%token <string> TOK_CASE
+%token <string> TOK_CHAR
+%token <string> TOK_COLON
+%token <string> TOK_COMMA
+%token <string> TOK_CONST
+%token <string> TOK_DIV
+%token <string> TOK_DO
+%token <string> TOK_DOT
+%token <string> TOK_DOTDOT
+%token <string> TOK_DOWNTO
+%token <string> TOK_ELSE
+%token <string> TOK_END
+%token <string> TOK_EQUAL
+%token <string> TOK_FOR
+%token <string> TOK_FUNCTION
+%token <string> TOK_GE
+%token <string> TOK_GOTO
+%token <string> TOK_GT
+%token <string> TOK_ID
+%token <string> TOK_IF
+%token <string> TOK_INTEGER
+%token <string> TOK_LB
+%token <string> TOK_LE
+%token <string> TOK_LP
+%token <string> TOK_LT
+%token <string> TOK_MINUS
+%token <string> TOK_MOD
+%token <string> TOK_MUL
+%token <string> TOK_NOT
+%token <string> TOK_OF
+%token <string> TOK_OR
+%token <string> TOK_PLUS
+%token <string> TOK_PROCEDURE
+%token <string> TOK_PROGRAM
+%token <string> TOK_RB
+%token <string> TOK_RDIV
+%token <string> TOK_READ
+%token <string> TOK_REAL
+%token <string> TOK_RECORD
+%token <string> TOK_REPEAT
+%token <string> TOK_RP
+%token <string> TOK_SEMI
+%token <string> TOK_STRING
+%token <string> TOK_SYS_CON
+%token <string> TOK_SYS_FUNCT
+%token <string> TOK_SYS_PROC
+%token <string> TOK_SYS_TYPE
+%token <string> TOK_THEN
+%token <string> TOK_TO
+%token <string> TOK_TYPE
+%token <string> TOK_UNEQUAL
+%token <string> TOK_UNKNOW_CHAR
+%token <string> TOK_UNTIL
+%token <string> TOK_VAR
+%token <string> TOK_WHILE
+%type <routine> program
+%type <routine> program_head
+%type <routine> routine
+%type <routine> sub_routine
+%type <routine> routine_head
+/*%type <dummy> label_part*/
+%type <const_def> const_part
+%type <const_def> const_expr_list
 %type <expr> const_value
 %type <type> type_part
 %type <type> type_decl_list
@@ -105,20 +111,20 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %type <field> field_decl
 %type <name_list> name_list
 %type <type> simple_type_decl
-%type <dummy> var_part
-%type <dummy> var_decl_list
-%type <dummy> var_decl
-%type <dummy> routine_part
-%type <dummy> function_decl
-%type <dummy> function_head
-%type <dummy> procedure_decl
-%type <dummy> procedure_head
-%type <dummy> parameters
-%type <dummy> para_decl_list
-%type <dummy> para_type_list
-%type <dummy> var_para_list
-%type <dummy> val_para_list
-%type <dummy> routine_body
+%type <var> var_part
+%type <var> var_decl_list
+%type <var> var_decl
+%type <routine> routine_part
+%type <routine> function_decl
+%type <routine_proto> function_head
+%type <routine> procedure_decl
+%type <routine_proto> procedure_head
+%type <param> parameters
+%type <param> para_decl_list
+%type <param_item> para_type_list
+%type <name_list> var_para_list
+%type <name_list> val_para_list
+%type <stmt> routine_body
 %type <stmt> stmt_list
 %type <stmt> stmt
 %type <stmt> non_label_stmt
@@ -144,43 +150,41 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %%
 
 program: program_head routine TOK_DOT {
-	//$$ = ast_program_new($1, $2);
+	$$ = $2;
 };
 
 program_head: TOK_PROGRAM TOK_ID TOK_SEMI {
-	//$$ = ast_program_head_new($2);
 }| error;
 
 routine: routine_head routine_body {
-	//$$ = ast_routine_new($1, $2);
+	$$ = routine_fill_body($1, $2);
 };
 
 sub_routine: routine_head routine_body {
-	//$$ = ast_sub_routine_new($1, $2);
+	$$ = routine_fill_body($1, $2);
 };
 
 routine_head: label_part const_part type_part var_part routine_part {
-	//$$ = ast_routine_head_new($1, $2, $3, $4, $5);
+	$$ = routine_new($2, $3, $4, $5);
 };
 
 label_part: %empty {
-	//$$ = ast_label_part_new();
 };
 
 const_part: TOK_CONST const_expr_list {
-	//$$ = ast_const_part_new($2);
+	$$ = $2;
 }| %empty {
-	//$$ = ast_const_part_new(NULL);
+	$$ = NULL;
 };
 
 const_expr_list: const_expr_list TOK_ID TOK_EQUAL const_value TOK_SEMI {
-	//$$ = ast_const_expr_list_new($1, $2, $4);
+	$$ = const_def_push($1, $2, $4);
 }| TOK_ID TOK_EQUAL const_value TOK_SEMI {
-	//$$ = ast_const_expr_list_new(NULL, $1, $3);
+	$$ = const_def_push(NULL, $1, $3);
 }| const_expr_list error {
-	//$$ = NULL;
+	$$ = NULL;
 }| error {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 const_value: TOK_INTEGER {
@@ -266,85 +270,85 @@ simple_type_decl: TOK_SYS_TYPE {
 };
 
 var_part: TOK_VAR var_decl_list {
-	//$$ = ast_var_part_new($2);
+	$$ = $2;
 }| %empty {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 var_decl_list: var_decl_list var_decl {
-	//$$ = ast_var_decl_list_new($1, $2);
+	$$ = var_push($1, $2);
 }| var_decl {
-	//$$ = ast_var_decl_list_new(NULL, $1);
+	$$ = var_push(NULL, $1);
 }| var_decl_list error {
-	//$$ = NULL;
+	$$ = NULL;
 }| error {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 var_decl: name_list TOK_COLON type_decl TOK_SEMI {
-	//$$ = ast_var_decl_new($1, $3);
+	$$ = var_new($1, $3);
 };
 
 routine_part: routine_part function_decl {
-	//$$ = ast_routine_part_new_f($1, $2);
+	$$ = routine_push($1, $2);
 }| routine_part procedure_decl {
-	//$$ = ast_routine_part_new_p($1, $2);
+	$$ = routine_push($1, $2);
 }| function_decl {
-	//$$ = ast_routine_part_new_f(NULL, $1);
+	$$ = routine_push(NULL, $1);
 }| procedure_decl {
-	//$$ = ast_routine_part_new_p(NULL, $1);
+	$$ = routine_push(NULL, $1);
 }| %empty {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 function_decl: function_head TOK_SEMI sub_routine TOK_SEMI {
-	//$$ = ast_function_decl_new($1, $3);
+	$$ = routine_fill_proto($3, $1);
 };
 
 function_head: TOK_FUNCTION TOK_ID parameters TOK_COLON simple_type_decl {
-	//$$ = ast_function_head_new($2, $3, $5);
+	$$ = routine_proto_new($2, $3, $5);
 }| error {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 procedure_decl: procedure_head TOK_SEMI sub_routine TOK_SEMI {
-	//$$ = ast_procedure_decl_new($1, $3);
+	$$ = routine_fill_proto($3, $1);
 };
 
 procedure_head: TOK_PROCEDURE TOK_ID parameters {
-	//$$ = ast_procedure_head_new($2, $3);
+	$$ = routine_proto_new($2, $3, NULL);
 }| error {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 parameters: TOK_LP para_decl_list TOK_RP {
-	//$$ = ast_parameters_new($2);
+	$$ = $2;
 }| %empty {
-	//$$ = NULL;
+	$$ = NULL;
 };
 
 para_decl_list: para_decl_list TOK_SEMI para_type_list {
-	//$$ = ast_para_decl_list_new($1, $3);
+	$$ = param_push($1, $3);
 }| para_type_list {
-	//$$ = ast_para_decl_list_new(NULL, $1);
+	$$ = param_push(NULL, $1);
 };
 
 para_type_list: var_para_list TOK_COLON simple_type_decl {
-	//$$ = ast_para_type_list_new_var($1, $3);
-}| val_para_list TOK_COLON simple_type_decl {
-	//$$ = ast_para_type_list_new_val($1, $3);
+	$$ = para_item_new($1, $3, 1);
+}| val_para_list TOK_COLON simple_type_decl {	
+	$$ = para_item_new($1, $3, 0);
 };
 
 var_para_list: TOK_VAR name_list {
-	//$$ = ast_var_para_list_new($2);
+	$$ = $2;
 };
 
 val_para_list: name_list {
-	//$$ = ast_val_para_list_new($1);
+	$$ = $1;
 };
 
 routine_body: compound_stmt {
-	//$$ = ast_routine_body_new($1);
+	$$ = $1;
 };
 
 stmt_list: stmt_list stmt TOK_SEMI {

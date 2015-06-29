@@ -9,13 +9,13 @@ struct stmt_s {
 };
 
 struct case_expr_s {
-	struct expr_s expr;
-	struct stmt_s stmt;
+	struct expr_s *expr;
+	struct stmt_s *stmt;
 	struct case_expr_s *prev;
 };
 
 struct stmt_s *stmt_push(struct stmt_s*, struct stmt_s*);
-struct stmt_s *stmt_label(struct stmt_*, char*);
+struct stmt_s *stmt_label(struct stmt_s*, char*);
 struct stmt_s *stmt_new_assign(struct expr_s*, struct expr_s*);
 struct stmt_s *stmt_fill_if(struct stmt_s*, struct expr_s*, struct stmt_s*);
 struct stmt_s *stmt_new_if(struct stmt_s*);

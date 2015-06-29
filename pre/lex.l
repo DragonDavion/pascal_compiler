@@ -2,13 +2,12 @@
 #include <string.h>
 #include <stdlib.h>
 #include "parse.tab.h"
-#include "lex.yy.h"
 
 #define YY_USER_ACTION \
 	yylloc->first_line = yylloc->last_line;\
 	yylloc->first_column = yylloc->last_column;\
 	yylloc->last_column += yyleng;\
-	yylval->str = strndup(yytext, yyleng);
+	yylval->string = strndup(yytext, yyleng);
 
 int yywrap();
 static void update_location(YYLTYPE*, char*);
