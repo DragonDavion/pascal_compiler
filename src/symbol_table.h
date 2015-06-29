@@ -6,7 +6,7 @@
 
 struct symbol_table_s
 {
-	struct rb_tree_node_s *proc_info_root;
+	struct rb_tree_s *proc_info_tree;
 	// TODO
 };
 
@@ -15,6 +15,17 @@ struct proc_info_s
 	char *name;
 	// TODO
 };
+
+struct const_info_s
+{
+	int type;
+	union value
+	{
+		int int_value;
+		double real_value;
+		int string_value_id;
+	}
+}
 
 void init_symbol_table_stack();
 void destroy_symbol_table_stack();
