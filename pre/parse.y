@@ -1,8 +1,7 @@
 %{
 #include <stdio.h>
 #include "main.h"
-#include "symbol_table.h"
-#include "stack.h"
+#include "utils.h"
 
 int yylex(YYSTYPE*, YYLTYPE*);
 %}
@@ -36,15 +35,9 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %%
 
 program: program_head routine TOK_DOT {
-	destroy_symbol_table_stack();
 };
 
 program_head: TOK_PROGRAM TOK_ID TOK_SEMI {
-	struct symbol_table_s *symbol_table = symbol_table();
-	init_symbol_table_stack();
-	push(symbol_table_stack, symbol_table);
-	struct proc_info_s *proc_info = new_proc_info($2);
-	add_proc_info(symbol_table, proc_info);
 }| error;
 
 routine: routine_head routine_body {
@@ -54,21 +47,17 @@ sub_routine: routine_head routine_body {
 };
 
 routine_head: label_part const_part type_part var_part routine_part {
-	printf("routine_head end\n");
 };
 
-label_part: /*empty*/ {
+label_part: %empty {
 };
 
 const_part: TOK_CONST const_expr_list {
-	printf("const_part end\n");
-}| /*empty*/ {
+}| %empty {
 };
 
 const_expr_list: const_expr_list TOK_ID TOK_EQUAL const_value TOK_SEMI {
-	printf("const: %s\n", $2);
 }| TOK_ID TOK_EQUAL const_value TOK_SEMI {
-	printf("const: %s\n", $1);
 }| const_expr_list error {
 }| error {
 };
@@ -81,8 +70,7 @@ const_value: TOK_INTEGER {
 };
 
 type_part: TOK_TYPE type_decl_list {
-	printf("type_part end\n");
-}| /*empty*/ {
+}| %empty {
 };
 
 type_decl_list: type_decl_list type_definition {
@@ -92,7 +80,6 @@ type_decl_list: type_decl_list type_definition {
 };
 
 type_definition: TOK_ID TOK_EQUAL type_decl TOK_SEMI {
-	printf("type definition: %s\n", $1);
 };
 
 type_decl: simple_type_decl {
@@ -127,8 +114,7 @@ simple_type_decl: TOK_SYS_TYPE {
 };
 
 var_part: TOK_VAR var_decl_list {
-	printf("var_part end\n");
-}| /*empty*/ {
+}| %empty {
 };
 
 var_decl_list: var_decl_list var_decl {
@@ -138,21 +124,19 @@ var_decl_list: var_decl_list var_decl {
 };
 
 var_decl: name_list TOK_COLON type_decl TOK_SEMI {
-	printf("var_decl end\n");
 };
 
 routine_part: routine_part function_decl {
 }| routine_part procedure_decl {
 }| function_decl {
 }| procedure_decl {
-}| /*empty*/ {
+}| %empty {
 };
 
 function_decl: function_head TOK_SEMI sub_routine TOK_SEMI {
 };
 
 function_head: TOK_FUNCTION TOK_ID parameters TOK_COLON simple_type_decl {
-	printf("function_head end: %s\n", $2);
 }| error {
 };
 
@@ -160,12 +144,11 @@ procedure_decl: procedure_head TOK_SEMI sub_routine TOK_SEMI {
 };
 
 procedure_head: TOK_PROCEDURE TOK_ID parameters {
-	printf("procedure_head end: %s\n", $2);
 }| error {
 };
 
 parameters: TOK_LP para_decl_list TOK_RP {
-}| /*empty*/ {
+}| %empty {
 };
 
 para_decl_list: para_decl_list TOK_SEMI para_type_list {
@@ -183,11 +166,10 @@ val_para_list: name_list {
 };
 
 routine_body: compound_stmt {
-	printf("routine_body end\n");
 };
 
 stmt_list: stmt_list stmt TOK_SEMI {
-}| /*empty*/ {
+}| %empty {
 }| stmt_list error {
 }| error {
 };
@@ -226,7 +208,7 @@ if_stmt: TOK_IF expression TOK_THEN stmt else_clause {
 };
 
 else_clause: TOK_ELSE stmt {
-}| /*empty*/ {
+}| %empty {
 };
 
 repeat_stmt: TOK_REPEAT stmt_list TOK_UNTIL expression {

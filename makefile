@@ -12,10 +12,11 @@ run: test/test.exe
 
 clean:
 	@echo Cleaning...
-	@rm -f tmp/*
-	@rm -f bin/*.exe
+	@rm -f -r tmp
+	@rm -f -r bin
 	@rm -f src/lex.yy.c
 	@rm -f src/parse.tab.*
+	@rm -f src/.*.swp
 	@rm -f test/test.s
 	@rm -f test/test.exe
 
@@ -28,6 +29,7 @@ showconf:
 
 bin/main.exe: src/parse.tab.c src/parse.tab.h src/lex.yy.c $(OBJS)
 	@echo Generating $@...
+	@mkdir bin -p
 	@gcc -o bin/main.exe $(OBJS)
 
 test/test.exe: test/test.pas bin/main.exe
@@ -46,6 +48,7 @@ src/lex.yy.c: pre/lex.l
 
 tmp/%.o: src/%.c
 	@echo Generating $@...
+	@mkdir tmp -p
 	@gcc -I src -c -MMD -MF tmp/$*.d -MT tmp/$*.d -MT $@ -o $@ $<
 
 -include $(DEPS)

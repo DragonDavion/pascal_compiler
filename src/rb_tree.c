@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <malloc.h>
 
+/*
 struct rb_tree_node_s *new_rb_tree()
 {
 	return NULL;
@@ -72,4 +73,4 @@ struct rb_tree_node_s *insert_into_rb_tree(struct rb_tree_node_s *node, void *va
 	
 	return tmp_node;
 }
-
+*/

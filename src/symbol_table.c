@@ -3,6 +3,7 @@
 #include <malloc.h>
 #include <string.h>
 
+/*
 struct stack_s *symbol_table_stack = NULL;
 
 void init_symbol_table_stack()
@@ -55,4 +56,4 @@ void add_proc_info(struct symbol_table_s *symbol_table, struct proc_info_s *proc
 {
 	insert_into_rb_tree(symbol_table->proc_info_root, proc_info->name, cmp_func, proc_info);
 }
-
+*/

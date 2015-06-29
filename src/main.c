@@ -4,15 +4,14 @@
 #include "symbol_table.h"
 
 int main() {
-	init_symbol_table_tree();
-    return yyparse();
+	return yyparse();
 }
 
 int yywarp() {
-    return 1;
+	return 1;
 }
 
 void yyerror(const YYLTYPE *yylloc, const char *msg) {
-    printf("%4d,%4d-%4d,%4d: %s\n", yylloc->first_line, yylloc->first_column, yylloc->last_line, yylloc->last_column, msg);
+	printf("%4d,%4d-%4d,%4d: %s\n", yylloc->first_line, yylloc->first_column, yylloc->last_line, yylloc->last_column, msg);
 }
 
