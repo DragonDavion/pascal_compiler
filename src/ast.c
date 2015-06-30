@@ -118,13 +118,6 @@ struct type_s *type_push(struct type_s *type_stack, struct type_s *new_type)
 	return new_type;
 }
 
-struct type_s *type_fill_name(struct type_s *type, char *name)
-{
-	type->name = name;
-	
-	return type;
-}
-
 struct type_s *type_new_array(struct type_s *bound, struct type_s *array_type)
 {
 	struct type_s *new_type = NULL;
@@ -158,12 +151,139 @@ struct type_s *type_new_record(struct field_s *fields)
 	return new_type;
 }
 
-struct field_s *field_push(struct field_s *field_stack, struct field_s *new_field);
-struct field_s *field_new(struct name_list_s *name_list, struct type_s *type);
-struct name_list_s *name_list_push(struct name_list_s *name_list_stack, char *new_name);
-struct type_s *type_new_sys(char *name);
-struct type_s *type_new_equal(char *name);
-struct type_s *type_new_enum(struct name_list_s *name_list);
-struct type_s *type_new_sub(struct expr_s *lower, struct expr_s *upper, int factor_lower, int factor_upper);
-struct const_def_s *const_def_push(struct const_def_s *const_def_stack, char *name, struct expr_s *value);
+struct field_s *field_push(struct field_s *field_stack, struct field_s *new_field)
+{
+	new_field->prev = field_stack;
+	
+	return new_field;
+}
+
+struct field_s *field_new(struct name_list_s *name_list, struct type_s *type)
+{
+	struct field_s *new_field = NULL;
+	
+	if((new_field = (struct field_s *)malloc(sizeof(struct field_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_field->name_list = name_list;
+		new_field->type = type;
+		new_field->prev = NULL;
+	}
+	
+	return new_field;
+}
+
+struct name_list_s *name_list_push(struct name_list_s *name_list_stack, char *new_name)
+{
+	struct name_list_s *new_name_list = NULL;
+	
+	if((new_name_list = (struct name_list_s *)malloc(sizeof(struct name_list_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_name_list->name = name;
+		new_name_list->prev = name_list_stack;
+	}
+	
+	return new_name_list;
+}
+
+struct type_s *type_new_sys(char *name)
+{
+	struct type_s *new_type = NULL;
+	
+	if((strcmp(name, "INTEGER") == 0) || (strcmp(name, "integer") == 0)) {
+		if((new_type = (struct type_s *)malloc(sizeof(struct type_s) + sizeof(struct type_integer_s))) == NULL) {
+			// TODO
+		}
+		else {
+			new_type->type = TYPE_INTEGER;
+			new_type->prev = NULL;
+		}
+	}
+	else if((strcmp(name, "REAL") == 0) || (strcmp(name, "real") == 0)) {
+		if((new_type = (struct type_s *)malloc(sizeof(struct type_s) + sizeof(struct type_real_s))) == NULL) {
+			// TODO
+		}
+		else {
+			new_type->type = TYPE_REAL;
+			new_type->prev = NULL;
+		}
+	}
+	else {
+		// TODO
+	}
+	
+	return new_type;
+}
+
+struct type_s *type_new_ref(char *name, struct type_s *type)
+{
+	struct type_s *new_type = NULL;
+	
+	if((new_type = (struct type_s *)malloc(sizeof(struct type_s) + sizeof(struct type_ref_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_type->type = TYPE_REF;
+		new_type->prev = NULL;
+		TYPE_REF_S(new_type)->name = name;
+		TYPE_REF_S(new_type)->type = type;
+	}
+	
+	return new_type;
+}
+
+struct type_s *type_new_enum(struct name_list_s *name_list)
+{
+	struct type_s *new_type = NULL;
+	
+	if((new_type = (struct type_s *)malloc(sizeof(struct type_s) + sizeof(struct type_enum_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_type->type = TYPE_ENUM;
+		new_type->prev = NULL;
+		TYPE_ENUM_S(new_type)->name_list = name_list;
+	}
+	
+	return new_type;
+}
+
+struct type_s *type_new_sub(struct expr_s *lower, struct expr_s *upper, int factor_lower, int factor_upper)
+{
+	struct type_s *new_type = NULL;
+	
+	if((new_type = (struct type_s *)malloc(sizeof(struct type_s) + sizeof(struct type_sub_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_type->type = TYPE_SUB;
+		new_type->prev = NULL;
+		TYPE_SUB_S(new_type)->lower = lower;
+		TYPE_SUB_S(new_type)->upper = upper;
+		TYPE_SUB_S(new_type)->factor_lower = factor_lower;
+		TYPE_SUB_S(new_type)->factor_upper = factor_upper;
+	}
+	
+	return new_type;
+}
+
+struct const_def_s *const_def_push(struct const_def_s *const_def_stack, char *name, struct expr_s *value)
+{
+	struct const_def_s *new_const_def = NULL;
+	
+	if((new_const_def = (struct const_def_s *)malloc(sizeof(struct const_def_s))) == NULL) {
+		// TODO
+	}
+	else {
+		new_const_def->name = name;
+		new_const_def->value = value;
+		new_const_def->prev = const_def_stack;
+	}
+	
+	return new_const_def;
+
+}
 

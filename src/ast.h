@@ -38,7 +38,7 @@ struct var_s
 	struct var_s *prev;
 };
 
-#define TYPE_UNKNOWN		0
+#define TYPE_REF			0
 #define TYPE_INTEGER		1
 #define TYPE_BOOL			2
 #define TYPE_REAL			3
@@ -48,6 +48,7 @@ struct var_s
 #define TYPE_SUB			7
 
 #define TYPE_S(node)			(((struct type_s *)(node)) - 1)
+#define TYPE_REF_S(node)		((struct type_ref_s *)((node) + 1))
 #define TYPE_INTEGER_S(node)	((struct type_integer_s *)((node) + 1))
 #define TYPE_BOOL_S(node)		((struct type_bool_s *)((node) + 1))
 #define TYPE_REAL_S(node)		((struct type_real_s *)((node) + 1))
@@ -67,6 +68,12 @@ struct type_integer_s {};
 struct type_bool_s {};
 struct type_real_s {};
 
+struct type_ref_s 
+{
+	char *name;
+	struct type_s *type;
+};
+
 struct type_array_s
 {
 	struct type_s *bound, *array_type;
@@ -85,11 +92,13 @@ struct type_enum_s
 struct type_sub_s
 {
 	struct expr_s *lower, *upper;
+	int factor_lower, factor_upper;
 };
 
 struct field_s
 {
 	struct name_list_s *name_list;
+	struct type_s *type;
 	struct field_s *prev;
 };
 
@@ -116,14 +125,13 @@ struct param_item_s *param_item_new(struct name_list_s *name_list, struct type_s
 struct var_s *var_push(struct var_s *var_stack, struct var_s *new_var);
 struct var_s *var_new(struct name_list_s *name_list, struct type_s *type);
 struct type_s *type_push(struct type_s *type_stack, struct type_s *new_type);
-struct type_s *type_fill_name(struct type_s *type, char *name);
 struct type_s *type_new_array(struct type_s *bound, struct type_s *array_type);
 struct type_s *type_new_record(struct field_s *fields);
 struct field_s *field_push(struct field_s *field_stack, struct field_s *new_field);
 struct field_s *field_new(struct name_list_s *name_list, struct type_s *type);
 struct name_list_s *name_list_push(struct name_list_s *name_list_stack, char *new_name);
 struct type_s *type_new_sys(char *name);
-struct type_s *type_new_equal(char *name);
+struct type_s *type_new_ref(char *name);
 struct type_s *type_new_enum(struct name_list_s *name_list);
 struct type_s *type_new_sub(struct expr_s *lower, struct expr_s *upper, int factor_lower, int factor_upper);
 struct const_def_s *const_def_push(struct const_def_s *const_def_stack, char *name, struct expr_s *value);
