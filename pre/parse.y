@@ -92,7 +92,7 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %token <string> TOK_UNTIL
 %token <string> TOK_VAR
 %token <string> TOK_WHILE
-%type <routine> program
+/*%type <dummy> program*/
 %type <routine> program_head
 %type <routine> routine
 %type <routine> sub_routine
@@ -150,7 +150,7 @@ int yylex(YYSTYPE*, YYLTYPE*);
 %%
 
 program: program_head routine TOK_DOT {
-	$$ = $2;
+	routine_root = $2;
 };
 
 program_head: TOK_PROGRAM TOK_ID TOK_SEMI {
