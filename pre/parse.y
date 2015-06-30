@@ -256,7 +256,7 @@ simple_type_decl: TOK_SYS_TYPE {
 }| TOK_ID {
 	$$ = type_new_equal($1);
 }| TOK_LP name_list TOK_RP {
-	$$ = type_new_enum($1);
+	$$ = type_new_enum($2);
 }| const_value TOK_DOTDOT const_value {
 	$$ = type_new_sub($1, $3, 1, 1);
 }| TOK_MINUS const_value TOK_DOTDOT const_value {
