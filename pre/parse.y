@@ -216,7 +216,7 @@ type_decl_list: type_decl_list type_definition {
 };
 
 type_definition: TOK_ID TOK_EQUAL type_decl TOK_SEMI {
-	$$ = type_fill_name($3, $1);
+	$$ = type_new_ref($1, $3);
 };
 
 type_decl: simple_type_decl {
@@ -254,7 +254,7 @@ name_list: name_list TOK_COMMA TOK_ID {
 simple_type_decl: TOK_SYS_TYPE {
 	$$ = type_new_sys($1);
 }| TOK_ID {
-	$$ = type_new_equal($1);
+	$$ = type_new_ref($1, NULL);
 }| TOK_LP name_list TOK_RP {
 	$$ = type_new_enum($2);
 }| const_value TOK_DOTDOT const_value {
