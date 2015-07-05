@@ -18,7 +18,7 @@ struct rb_tree_node_s
 };
 
 struct rb_tree_s *new_rb_tree();
-int insert_into_rb_tree(struct rb_tree_s *tree, struct rb_tree_node_s *node, void *value, int(void*,void*), void *content);
+int insert_into_rb_tree(struct rb_tree_s *tree, void *value, int(void*,void*), void *content);
 
 #endif /* _RB_TREE_H */
 

@@ -9,6 +9,9 @@ struct rb_tree_s *new_rb_tree()
 	if((tree = (struct rb_tree_s *)malloc(sizeof(struct rb_tree_s))) == NULL) {
 		// TODO
 	}
+	else {
+		tree->root = NULL;
+	}
 	
 	return tree;
 }
@@ -126,9 +129,9 @@ static void insert_case(struct rb_tree_s *tree, struct rb_tree_node_s *node)
 	}
 }
 
-void insert_into_rb_tree(struct rb_tree_s *tree, struct rb_tree_node_s *node, void *value, int cmp_func(void *, void *), void *content)
+void insert_into_rb_tree(struct rb_tree_s *tree, void *value, int cmp_func(void *, void *), void *content)
 {
-	struct rb_tree_node_s *tmp_node;
+	struct rb_tree_node_s *tmp_node, *node = tree->root;
 	
 	if((tmp_node = (struct rb_tree_node_s *)malloc(sizeof(struct rb_tree_node_s))) == NULL) {
 		// TODO

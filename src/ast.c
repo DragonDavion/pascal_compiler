@@ -1,4 +1,5 @@
 #include "ast.h"
+#include "symtab.h"
 #include <stdlib.h>
 #include <malloc.h>
 
@@ -17,6 +18,7 @@ struct routine_s *routine_new(struct const_def_s *const_defs, struct type_s *typ
 		// TODO
 	}
 	else {
+		new_routine->symtab = NULL;
 		new_routine->const_defs = const_defs;
 		new_routine->types = types;
 		new_routine->variables = variables;
@@ -168,6 +170,7 @@ struct field_s *field_new(struct name_list_s *name_list, struct type_s *type)
 	else {
 		new_field->name_list = name_list;
 		new_field->type = type;
+		new_field->offset = -1;
 		new_field->prev = NULL;
 	}
 	
@@ -263,6 +266,8 @@ struct type_s *type_new_sub(struct expr_s *lower, struct expr_s *upper, int fact
 		new_type->prev = NULL;
 		TYPE_SUB_S(new_type)->lower = lower;
 		TYPE_SUB_S(new_type)->upper = upper;
+		TYPE_SUB_S(new_type)->val_lower = -1;
+		TYPE_SUB_S(new_type)->val_upper = -1;
 		TYPE_SUB_S(new_type)->factor_lower = factor_lower;
 		TYPE_SUB_S(new_type)->factor_upper = factor_upper;
 	}
@@ -284,6 +289,5 @@ struct const_def_s *const_def_push(struct const_def_s *const_def_stack, char *na
 	}
 	
 	return new_const_def;
-
 }
 

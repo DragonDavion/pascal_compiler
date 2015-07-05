@@ -1,8 +1,11 @@
 #ifndef AST_H_
 #define AST_H_
 
+#include "symtab.h"
+
 struct routine_s
 {
+	struct symtab_s *symtab;
 	struct const_def_s *const_defs;
 	struct type_s *types;
 	struct var_s *variables;
@@ -60,7 +63,7 @@ struct var_s
 struct type_s
 {
 	char *name;
-	int type;
+	int type, width;
 	struct type_s *prev;
 };
 
@@ -92,13 +95,15 @@ struct type_enum_s
 struct type_sub_s
 {
 	struct expr_s *lower, *upper;
+	int val_lower, val_upper;
 	int factor_lower, factor_upper;
 };
 
 struct field_s
 {
-	struct name_list_s *name_list;
+	char *name;
 	struct type_s *type;
+	int offset;
 	struct field_s *prev;
 };
 
