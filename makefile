@@ -14,6 +14,7 @@ clean:
 	@echo Cleaning...
 	@rm -f -r tmp
 	@rm -f -r bin
+	@rm -f pre/parse.y
 	@rm -f src/lex.yy.c
 	@rm -f src/parse.tab.*
 	@rm -f src/.*.swp
@@ -46,6 +47,9 @@ src/parse.tab.c src/parse.tab.h: pre/parse.y
 src/lex.yy.c: pre/lex.l
 	@echo Generating $@...
 	@flex -o $@ $<
+
+pre/parse.y: pre/parse_head.y pre/parse_union1.y pre/parse_union2.y pre/parse_token.y pre/parse_type1.y pre/parse_type2.y pre/parse_rule1.y pre/parse_rule2.y pre/parse_tail.y
+	cat $^ > $@
 
 tmp/%.o: src/%.c
 	@echo Generating $@...
