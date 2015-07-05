@@ -17,6 +17,7 @@ clean:
 	@rm -f src/lex.yy.c
 	@rm -f src/parse.tab.*
 	@rm -f src/.*.swp
+	@rm -f pre/.*.swp
 	@rm -f test/test.s
 	@rm -f test/test.exe
 
